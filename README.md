@@ -5,6 +5,8 @@
 waveform3d converts music or audio to a 3D ".stl" file which can be printed by a 3D printer.
 It is possible to either retrieve information online (through The Echo Nest services) or convert a local file stored on the hard drive.
 
+
+
 The output can be:
   - waveform
   - pitches/timbre list
