@@ -17,7 +17,7 @@ The output can be:
   - [pyen](https://github.com/plamere/pyen/)
   - [stl_tools](https://github.com/thearn/stl_tools/)
 
-# Quick Examples
+## Quick Examples
 
 Create a 3D model of the waveform of the song "No Surprises" by Radiohead:
 
