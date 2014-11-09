@@ -5,7 +5,7 @@
 waveform3d converts music or audio to a 3D ".stl" file which can be printed by a 3D printer.
 It is possible to either retrieve information online (through The Echo Nest services) or convert a local file stored on the hard drive.
 
-![3D Waveform](/path/to/img.jpg "Radiohead - No Surprises")
+![3D Waveform](3D_waveform.png?raw=true "Radiohead - No Surprises")
 
 The output can be:
   - waveform
