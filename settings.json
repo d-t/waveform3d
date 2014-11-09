@@ -1,0 +1,12 @@
+{
+	"en_api_key": "6MPGRUFLWJ3WE0KVM",
+
+	"output_folder": "output/",
+
+	"height": "2000",
+	"min_absolute_value": "3",
+	"n_waveform_bars": "1",
+
+	"scale": "0.01",
+	"mask_val": "0.1"
+}
