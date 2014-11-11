@@ -39,14 +39,14 @@ Create a 3D model of the spectrum of the file "voice.wav" contained in the "data
 
 ## Settings
 
-  - en_api_key: The Echo Nest API Key. It is possible to activate one [here](https://developer.echonest.com/account/register "Create an Echo Nest account").
-  - output_folder: the name of the folder where the STL files will be exported
-  - height_Y: the height of the final model along the Y axis (i.e. its depth)
-  - height_Z: the height of the final model along the Z axis (i.e. its "vertical" height)
-  - min_absolute_value: the minimum height on the Y axis of the waveform
-  - n_waveform_bars: number of continous bars that will be merged. By varying this parameter it is possible to create an effect similar to the [Soundcloud waveform with "squared" bars](https://developers.soundcloud.com/assets/posts/waveform_rendering_blurred-e5dfdb680b95ea92d89611c513691d94.png)
-  - scale: scales the height (surface)  of the resulting STL mesh. Tune to match needs (see [here](https://github.com/thearn/stl_tools))
-  - mask_val: any element of the inputted array that is less than this value will not be included in the mesh (see [here](https://github.com/thearn/stl_tools))
+  - *en_api_key*: The Echo Nest API Key. It is possible to activate one [here](https://developer.echonest.com/account/register "Create an Echo Nest account").
+  - *output_folder*: the name of the folder where the STL files will be exported
+  - *height_Y*: the height of the final model along the Y axis (i.e. its depth)
+  - *height_Z*: the height of the final model along the Z axis (i.e. its "vertical" height)
+  - *min_absolute_value*: the minimum height on the Y axis of the waveform
+  - *n_waveform_bars*: number of continous bars that will be merged. By varying this parameter it is possible to create an effect similar to the [Soundcloud waveform with "squared" bars](https://developers.soundcloud.com/assets/posts/waveform_rendering_blurred-e5dfdb680b95ea92d89611c513691d94.png)
+  - *scale*: scales the height (surface)  of the resulting STL mesh. Tune to match needs (see [here](https://github.com/thearn/stl_tools))
+  - *mask_val*: any element of the inputted array that is less than this value will not be included in the mesh (see [here](https://github.com/thearn/stl_tools))
 
 ## TODO
 
