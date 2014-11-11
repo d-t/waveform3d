@@ -30,7 +30,8 @@ class Waveform3d(object):
             # Store settings
             self.EN_API_KEY = settings['en_api_key']
             self.OUTPUT_FOLDER = settings['output_folder']
-            self.height = int(settings['height'])
+            self.height_Y = int(settings['height_Y'])
+            self.height_Z = int(settings['height_Z'])
             self.min_absolute_value = int(settings['min_absolute_value'])
             self.n_waveform_bars = int(settings['n_waveform_bars'])
             self.scale = float(settings['scale'])
@@ -80,6 +81,17 @@ class Waveform3d(object):
         return input_list
 
 
+    def _increase_model_depth(self, matrix, n):
+        new_matrix = []
+        for i in xrange(len(matrix)):  # for each column...
+            new_col = []
+            for j in xrange(len(matrix[i])):  # for each row...
+                for k in xrange(n):  # for n times...
+                    new_col.append(matrix[i][j])
+            new_matrix.append(new_col)
+        return new_matrix
+
+
     def make_waveform_square(self, waveform, n_bars_to_merge=1):
         res_waveform = None
         if len(waveform) > 0:
@@ -114,17 +126,6 @@ class Waveform3d(object):
         return waveform_3d
 
 
-    def _increase_model_depth(self, matrix, n):
-        new_matrix = []
-        for i in xrange(len(matrix)):  # for each column...
-            new_col = []
-            for j in xrange(len(matrix[i])):  # for each row...
-                for k in xrange(n):  # for n times...
-                    new_col.append(matrix[i][j])
-            new_matrix.append(new_col)
-        return new_matrix
-
-
     def online_music_3d(self, artist_name, track_name, mode="loudness_max"):
         """ Gets information from The Echo Nest services 
             and creates a 3D model of the input song.
@@ -146,15 +147,15 @@ class Waveform3d(object):
 
             if mode == 'loudness_max':  # waveform mode
                 loudness_list = self._process_loudness_list(audio_features)
-                loudness_list = self._rescale_list(loudness_list, 0, 100)
+                loudness_list = self._rescale_list(loudness_list, 0, self.height_Y)
                 processed_waveform = self.make_waveform_square(loudness_list, 
                                                           self.n_waveform_bars)
-                model_3d = self.make_waveform_3d(processed_waveform, self.height)
+                model_3d = self.make_waveform_3d(processed_waveform, self.height_Z)
 
             else:  # pitches or timbre
                 new_features = []
                 for af in audio_features:
-                    new_features.append(self._rescale_list(af, self.min_absolute_value, self.height))
+                    new_features.append(self._rescale_list(af, self.min_absolute_value, self.height_Z))
                 new_features = self._increase_model_depth(new_features, self.depth_factor)
                 model_3d = np.array(new_features)
 
@@ -191,12 +192,12 @@ class Waveform3d(object):
             half_waveform = [waveform[i] for i in xrange(len(waveform)) if waveform[i]>0 and i%downsample_factor==0]
 
             # Rescale waveform
-            half_waveform = self._rescale_list(half_waveform, 0, 100)
+            half_waveform = self._rescale_list(half_waveform, 0, self.height_Y)
             processed_waveform = self.make_waveform_square(half_waveform, self.n_waveform_bars)  # make waveform "square"
 
             # Convert 2D waveform into 3D
             print "Creating 3D model"
-            model_3d = self.make_waveform_3d(processed_waveform, self.height)
+            model_3d = self.make_waveform_3d(processed_waveform, self.height_Z)
 
         else:  # frequency domain analysis
             self.mask_val /= 100
@@ -214,7 +215,7 @@ class Waveform3d(object):
             for curr_fft in stft:
                 min_loudness_value = max(curr_fft)
                 ds_fft = [curr_fft[j] + min_loudness_value for j in xrange(len(curr_fft)) if j%downsample_factor==0]
-                ds_fft = self._rescale_list(ds_fft, self.min_absolute_value, self.height)
+                ds_fft = self._rescale_list(ds_fft, self.min_absolute_value, self.height_Z)
                 new_stft.append(ds_fft)
             model_3d = np.array(new_stft)
 

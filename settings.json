@@ -3,7 +3,8 @@
 
 	"output_folder": "output/",
 
-	"height": "2000",
+	"height_Y": "50",
+	"height_Z": "2000",
 	"min_absolute_value": "3",
 	"n_waveform_bars": "1",
 
