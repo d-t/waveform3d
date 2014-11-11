@@ -160,6 +160,7 @@ class Waveform3d(object):
                 model_3d = np.array(new_features)
 
             # Export 3D model
+            print "Exporting the 3D file"
             if self.OUTPUT_FOLDER[-1] != '/':
                 self.OUTPUT_FOLDER.append('/')
             output_filename = self.OUTPUT_FOLDER + artist_name + " - " + track_name + "_" + mode + ".stl"
