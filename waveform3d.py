@@ -187,7 +187,7 @@ class Waveform3d(object):
             # Downsample waveform and store positive values only
             if len(waveform) > 1000:
                 m = len(str(len(waveform)))
-                downsample_factor = 10 ** (m-1-3)  # 1k (i.e. 10^3) magnitude
+                downsample_factor = (10 ** (m-1-3) * int(str(len(waveform))[0]))  # 1k (i.e. 10^3) magnitude
             else:
                 downsample_factor = 1
             half_waveform = [waveform[i] for i in xrange(len(waveform)) if waveform[i]>0 and i%downsample_factor==0]
@@ -218,6 +218,7 @@ class Waveform3d(object):
                 ds_fft = [curr_fft[j] + min_loudness_value for j in xrange(len(curr_fft)) if j%downsample_factor==0]
                 ds_fft = self._rescale_list(ds_fft, self.min_absolute_value, self.height_Z)
                 new_stft.append(ds_fft)
+            print "Creating 3D model"
             model_3d = np.array(new_stft)
 
         print "Exporting the 3D file"
