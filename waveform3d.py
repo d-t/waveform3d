@@ -24,18 +24,9 @@ class Waveform3d(object):
             settings_filename = _DEFAULT_SETTINGS_FILENAME
         try:
             # Load settings
-            settings_file = open(settings_filename, 'rb')
-            settings = json.load(settings_file)
-            settings_file.close()
-            # Store settings
-            self.EN_API_KEY = settings['en_api_key']
-            self.OUTPUT_FOLDER = settings['output_folder']
-            self.height_Y = int(settings['height_Y'])
-            self.height_Z = int(settings['height_Z'])
-            self.min_absolute_value = int(settings['min_absolute_value'])
-            self.n_waveform_bars = int(settings['n_waveform_bars'])
-            self.scale = float(settings['scale'])
-            self.mask_val = float(settings['mask_val'])
+            self.load_settings(settings_filename=settings_filename)
+
+            
             # Additional settings
             self.scale_factor = 0.5
             self.depth_factor = 20
@@ -73,6 +64,24 @@ class Waveform3d(object):
         return loudness_list
 
 
+    def _movingaverage(self, values,window):
+        weigths = np.repeat(1.0, window)/window
+        #including valid will REQUIRE there to be enough datapoints.
+        #for example, if you take out valid, it will start @ point one,
+        #not having any prior points, so itll be 1+0+0 = 1 /3 = .3333
+        smas = np.convolve(values, weigths, 'valid')
+        return smas # as a numpy array
+
+
+    def _limit_spikes(self, f, threshold, reduce_factor):
+        new_f = []
+        for x in f:
+            if x > threshold:
+                x = threshold + (x / reduce_factor)
+            new_f.append(x)
+        return new_f
+
+
     def _rescale_list(self, input_list, a, b):
         input_max = max(input_list)
         rescale_factor = (b - a) / float(input_max)
@@ -90,6 +99,27 @@ class Waveform3d(object):
                     new_col.append(matrix[i][j])
             new_matrix.append(new_col)
         return new_matrix
+
+
+    def load_settings(self, settings_filename=_DEFAULT_SETTINGS_FILENAME):
+        """ Load settings from file.
+            
+        Args:
+            settings_filename: name of the file where settings
+                               are stored
+        """
+        settings_file = open(settings_filename, 'rb')
+        settings = json.load(settings_file)
+        settings_file.close()
+        # Store settings
+        self.EN_API_KEY = settings['en_api_key']
+        self.OUTPUT_FOLDER = settings['output_folder']
+        self.height_Y = int(settings['height_Y'])
+        self.height_Z = int(settings['height_Z'])
+        self.min_absolute_value = int(settings['min_absolute_value'])
+        self.n_waveform_bars = int(settings['n_waveform_bars'])
+        self.scale = float(settings['scale'])
+        self.mask_val = float(settings['mask_val'])
 
 
     def make_waveform_square(self, waveform, n_bars_to_merge=1):
@@ -192,9 +222,11 @@ class Waveform3d(object):
                 downsample_factor = 1
             half_waveform = [waveform[i] for i in xrange(len(waveform)) if waveform[i]>0 and i%downsample_factor==0]
 
-            # Rescale waveform
-            half_waveform = self._rescale_list(half_waveform, 0, self.height_Y)
-            processed_waveform = self.make_waveform_square(half_waveform, self.n_waveform_bars)  # make waveform "square"
+            # Reshape and rescale waveform
+            processed_waveform = self._movingaverage(half_waveform, 10)
+            # processed_waveform = self._limit_spikes(half_waveform, np.mean(half_waveform), 5)
+            processed_waveform = self._rescale_list(processed_waveform, 0, self.height_Y)
+            processed_waveform = self.make_waveform_square(processed_waveform, self.n_waveform_bars)  # make waveform "square"
 
             # Convert 2D waveform into 3D
             print "Creating 3D model"
