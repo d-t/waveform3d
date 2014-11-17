@@ -3,11 +3,12 @@
 
 	"output_folder": "output/",
 
-	"height_Y": "100",
+	"height_Y": "70",
 	"height_Z": "1000",
-	"ma_window": "5",
-	"min_absolute_value": "3",
-	"n_waveform_bars": "1",
+	"ma_window": "10",
+	"depth_factor": "30",
+	"min_absolute_value": "5",
+	"n_waveform_bars": "3",
 
 	"scale": "0.01",
 	"mask_val": "0.1"

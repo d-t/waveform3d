@@ -29,7 +29,6 @@ class Waveform3d(object):
             
             # Additional settings
             self.scale_factor = 0.5
-            self.depth_factor = 20
         except Exception, e:
             print e
 
@@ -116,6 +115,8 @@ class Waveform3d(object):
         self.OUTPUT_FOLDER = settings['output_folder']
         self.height_Y = int(settings['height_Y'])
         self.height_Z = int(settings['height_Z'])
+        self.ma_window_size = int(settings['ma_window'])
+        self.depth_factor = int(settings['depth_factor'])
         self.min_absolute_value = int(settings['min_absolute_value'])
         self.n_waveform_bars = int(settings['n_waveform_bars'])
         self.scale = float(settings['scale'])
@@ -223,7 +224,7 @@ class Waveform3d(object):
             half_waveform = [waveform[i] for i in xrange(len(waveform)) if waveform[i]>0 and i%downsample_factor==0]
 
             # Reshape and rescale waveform
-            processed_waveform = self._movingaverage(half_waveform, 10)
+            processed_waveform = self._movingaverage(half_waveform, self.ma_window_size)
             # processed_waveform = self._limit_spikes(half_waveform, np.mean(half_waveform), 5)
             processed_waveform = self._rescale_list(processed_waveform, 0, self.height_Y)
             processed_waveform = self.make_waveform_square(processed_waveform, self.n_waveform_bars)  # make waveform "square"
