@@ -3,12 +3,14 @@
 waveform3d converts music or audio to a 3D STL file which can be printed by a 3D printer.
 It is possible to either retrieve information online (through The Echo Nest services) or convert a local file stored on the hard drive.
 
-![3D Waveform](3D_waveform.png?raw=true "Radiohead - No Surprises")
+![3D Waveform](3D_waveform.png?raw=true "Radiohead - No Surprises")  
 
 The output can be:
   - waveform
   - pitches/timbre list
   - frequency components (i.e. audio spectrum)
+
+![3D Waveform](3D_spectrum1.png?raw=true "Fatima Al Qadiri - Shanzhai")  
 
 ## Dependencies
 
@@ -42,6 +44,7 @@ Create a 3D model of the spectrum of the file "voice.wav" contained in the "data
   - *height_Y*: the height of the final model along the Y axis (i.e. its depth)
   - *height_Z*: the height of the final model along the Z axis (i.e. its "vertical" height)
   - *ma_window*: number of samples used by the moving average to process the waveform (for local files only)
+  - *depth_factor*: number of times a single STFT row is repeated on the Y axis (for local files, STFT mode only)
   - *min_absolute_value*: the minimum height on the Y axis of the waveform
   - *n_waveform_bars*: number of continous bars that will be merged. By varying this parameter it is possible to create an effect similar to the [Soundcloud waveform with "squared" bars](https://developers.soundcloud.com/assets/posts/waveform_rendering_blurred-e5dfdb680b95ea92d89611c513691d94.png)
   - *scale*: scales the height (surface)  of the resulting STL mesh. Tune to match needs (see [here](https://github.com/thearn/stl_tools))
