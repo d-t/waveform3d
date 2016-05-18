@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Waveform3d by d-t</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Waveform3d</h1>
+      <h2 class="project-tagline">Python code to create a 3D print model from music or audio file.</h2>
+      <a href="https://github.com/d-t/waveform3d" class="btn">View on GitHub</a>
+      <a href="https://github.com/d-t/waveform3d/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/d-t/waveform3d/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="waveform3d" class="anchor" href="#waveform3d" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>waveform3d</h1>
+
+<p>waveform3d converts music or audio to a 3D STL file which can be printed by a 3D printer.
+It is possible to either retrieve information online (through The Echo Nest services) or convert a local file stored on the hard drive.</p>
+
+<p><img src="3D_waveform.png?raw=true" alt="3D Waveform" title="Radiohead - No Surprises">  </p>
+
+<p>The output can be:</p>
+
+<ul>
+<li>waveform</li>
+<li>pitches/timbre list</li>
+<li>frequency components (i.e. audio spectrum)</li>
+</ul>
+
+<p><img src="3D_spectrum1.png?raw=true" alt="3D Waveform" title="Fatima Al Qadiri - Shanzhai">  </p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>numpy</li>
+<li><a href="https://github.com/bmcfee/librosa/">librosa</a></li>
+<li><a href="https://github.com/plamere/pyen/">pyen</a></li>
+<li><a href="https://github.com/thearn/stl_tools/">stl_tools</a></li>
+</ul>
+
+<h2>
+<a id="quick-examples" class="anchor" href="#quick-examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Examples</h2>
+
+<p>Create a 3D model of the waveform of the song "No Surprises" by Radiohead:</p>
+
+<pre><code>from waveform3d import Waveform3d
+wf = Waveform3d()
+
+wf.online_music_3d("Radiohead", "No surprises")
+</code></pre>
+
+<p>Create a 3D model of the pitches of the song "No Surprises" by Radiohead:</p>
+
+<pre><code>wf.online_music_3d("Radiohead", "No surprises", mode="pitches")
+</code></pre>
+
+<p>Create a 3D model of the spectrum of the file "voice.wav" contained in the "data" folder:</p>
+
+<pre><code>wf.local_audio_3d("data/voice.wav", mode="stft")
+</code></pre>
+
+<h2>
+<a id="settings" class="anchor" href="#settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Settings</h2>
+
+<ul>
+<li>
+<em>en_api_key</em>: The Echo Nest API Key. It is possible to activate one <a href="https://developer.echonest.com/account/register" title="Create an Echo Nest account">here</a>.</li>
+<li>
+<em>output_folder</em>: the name of the folder where the STL files will be exported</li>
+<li>
+<em>height_Y</em>: the height of the final model along the Y axis (i.e. its depth)</li>
+<li>
+<em>height_Z</em>: the height of the final model along the Z axis (i.e. its "vertical" height)</li>
+<li>
+<em>ma_window</em>: number of samples used by the moving average to process the waveform (for local files only)</li>
+<li>
+<em>depth_factor</em>: number of times a single STFT row is repeated on the Y axis (for local files, STFT mode only)</li>
+<li>
+<em>min_absolute_value</em>: the minimum height on the Y axis of the waveform</li>
+<li>
+<em>n_waveform_bars</em>: number of continous bars that will be merged. By varying this parameter it is possible to create an effect similar to the <a href="https://developers.soundcloud.com/assets/posts/waveform_rendering_blurred-e5dfdb680b95ea92d89611c513691d94.png">Soundcloud waveform with "squared" bars</a>
+</li>
+<li>
+<em>scale</em>: scales the height (surface)  of the resulting STL mesh. Tune to match needs (see <a href="https://github.com/thearn/stl_tools">here</a>)</li>
+<li>
+<em>mask_val</em>: any element of the inputted array that is less than this value will not be included in the mesh (see <a href="https://github.com/thearn/stl_tools">here</a>)</li>
+</ul>
+
+<h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>Implement "more three-dimensional" shapes, such as circles/squares etc</li>
+<li>"Jewelry" option that will include holes in the 3D model</li>
+<li>Implement the option of including text (e.g. name of the track, text of the voice recording, etc) on the 3D model</li>
+</ul>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<p>In case of a "ValueError: zero-size array to reduction operation maximum which has no identity", try reducing the mask_val in the settings.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/d-t/waveform3d">Waveform3d</a> is maintained by <a href="https://github.com/d-t">d-t</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
